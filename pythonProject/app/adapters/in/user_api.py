@@ -1,15 +1,15 @@
-# adapters/in/api.py
+# adapters/in/user_api.py
 from fastapi import FastAPI, HTTPException
 from typing import List
 
-from adapters.out.mongo_user_repository import MongoUserRepository
-from domain.use_cases.user_crud_use_case import UserCrudUseCase
-from domain.model.user import User
+from app.adapters.out.mongo import MongoRepository
+from app.domain.use_cases.user_crud_use_case import UserCrudUseCase
+from app.domain.model.user import User
 
 app = FastAPI()
 
 # Crear el repositorio de MongoDB y los casos de uso
-user_repo = MongoUserRepository("mongodb://localhost:27017")
+user_repo = MongoRepository("mongodb://localhost:27017")
 user_crud = UserCrudUseCase(user_repo)
 
 @app.post("/user", response_model=User)
