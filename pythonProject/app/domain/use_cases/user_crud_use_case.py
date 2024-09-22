@@ -7,17 +7,17 @@ class UserCrudUseCase:
         self.user_repo = user_repo
 
     def create_user(self, username: str, password: str) -> User:
-        user = User(id=None, username=username, password=password)
+        user = User(username, password)
         return self.user_repo.create(user)
 
-    def get_user(self, user_id: str) -> Optional[User]:
+    def get_user(self, user_id: int) -> Optional[User]:
         return self.user_repo.read(user_id)
 
-    def update_user(self, user_id: str, username: str, password: str) -> Optional[User]:
-        user = User(id=user_id, username=username, password=password)
+    def update_user(self, user_id: int, username: str, password: str) -> Optional[User]:
+        user = User(user_id, username, password)
         return self.user_repo.update(user_id, user)
 
-    def delete_user(self, user_id: str) -> bool:
+    def delete_user(self, user_id: int) -> bool:
         return self.user_repo.delete(user_id)
 
     def list_users(self) -> List[User]:
