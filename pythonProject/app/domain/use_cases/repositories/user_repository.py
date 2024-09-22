@@ -9,15 +9,15 @@ class IUserRepository(ABC):
         pass
     
     @abstractmethod
-    def read(self, user_id: str) -> Optional[User]:
+    def read(self, user_id: int) -> Optional[User]:
         pass
 
     @abstractmethod
-    def update(self, user_id: str, user: User) -> Optional[User]:
+    def update(self, user_id: int, user: User) -> Optional[User]:
         pass
 
     @abstractmethod
-    def delete(self, user_id: str) -> bool:
+    def delete(self, user_id: int) -> bool:
         pass
 
     @abstractmethod
