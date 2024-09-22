@@ -1,0 +1,24 @@
+from typing import List, Optional
+from app.domain.model.user import User
+from app.domain.use_cases.repositories.user_repository import IUserRepository
+
+class UserCrudUseCase:
+    def __init__(self, user_repo: IUserRepository):
+        self.user_repo = user_repo
+
+    def create_user(self, username: str, password: str) -> User:
+        user = User(id=None, username=username, password=password)
+        return self.user_repo.create(user)
+
+    def get_user(self, user_id: str) -> Optional[User]:
+        return self.user_repo.read(user_id)
+
+    def update_user(self, user_id: str, username: str, password: str) -> Optional[User]:
+        user = User(id=user_id, username=username, password=password)
+        return self.user_repo.update(user_id, user)
+
+    def delete_user(self, user_id: str) -> bool:
+        return self.user_repo.delete(user_id)
+
+    def list_users(self) -> List[User]:
+        return self.user_repo.list()
