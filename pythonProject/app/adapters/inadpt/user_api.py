@@ -7,7 +7,10 @@ from pythonProject.app.adapters.DTOs.purchase_response_dto import PurchaseRespon
 from pythonProject.app.adapters.DTOs.user_create_dto import UserCreateDTO
 from pythonProject.app.adapters.DTOs.user_response_dto import UserResponseDTO
 from pythonProject.app.adapters.out.mongo_user_repository import MongoUserRepository
+from pythonProject.app.adapters.out.singleton import singletonUserRepository, singletonPurchaseRepository
+from pythonProject.app.domain.model.user import User
 from pythonProject.app.domain.use_cases.add_purchase_to_user import AddPurchaseToUser
+from pythonProject.app.domain.use_cases.purchase_crud_use_case import PurchaseCrudUseCase
 from pythonProject.app.domain.use_cases.user_crud_use_case import UserCrudUseCase
 
 logging.basicConfig(level=logging.INFO)
@@ -16,26 +19,31 @@ logger = logging.getLogger(__name__)
 user_router = APIRouter()
 
 # Configuración de MongoDB
-mongo_uri = "mongodb+srv://juanjogomezarenas1:pass12345@pokeapi.cjeck.mongodb.net/?retryWrites=true&w=majority&appName=pokeApi"
-db_name = "pokedex_db"
-user_repo = MongoUserRepository(mongo_uri, db_name)
-user_crud = UserCrudUseCase(user_repo)
+#mongo_uri = "mongodb+srv://juanjogomezarenas1:pass12345@pokeapi.cjeck.mongodb.net/?retryWrites=true&w=majority&appName=pokeApi&tlsAllowInvalidCertificates=true"
+#db_name = "pokedex_db"
+#user_repo = MongoUserRepository(mongo_uri, db_name)
+user_crud = UserCrudUseCase(singletonUserRepository)
+purchase_repo = PurchaseCrudUseCase(singletonPurchaseRepository)
+add_purchases_use_case = AddPurchaseToUser(singletonUserRepository, purchase_repo)
 
 # Puedes reutilizar el repositorio de compras aquí
 from pythonProject.app.adapters.out.mongo_purchase_repository import MongoPurchaseRepository
 
-purchase_repo = MongoPurchaseRepository(mongo_uri, db_name)
-add_purchases_use_case = AddPurchaseToUser(user_repo, purchase_repo)
+#purchase_repo = MongoPurchaseRepository(mongo_uri, db_name)
+#add_purchases_use_case = AddPurchaseToUser(user_repo, purchase_repo)
+
 
 
 @user_router.post("/user", response_model=UserResponseDTO)
 def create_user(user_data: UserCreateDTO):
+    new_user = User(0, user_data.user, user_data.password)
+    logger.info(f"Creating user: {new_user}")
     new_user = user_crud.create_user(user_data.user, user_data.password)
     return new_user
 
 
 @user_router.get("/user/{user_id}", response_model=UserResponseDTO)
-def get_user(user_id: str):  # Cambiado a str para ObjectId
+def get_user(user_id: int):  # Cambiado a str para ObjectId
     user = user_crud.get_user(user_id)
     if user:
         return user

@@ -4,22 +4,24 @@ from fastapi import HTTPException, APIRouter
 from pythonProject.app.adapters.DTOs.purchase_create_dto import PurchaseCreateDTO
 from pythonProject.app.adapters.DTOs.purchase_response_dto import PurchaseResponseDTO
 from pythonProject.app.adapters.out.mongo_purchase_repository import MongoPurchaseRepository
+from pythonProject.app.adapters.out.singleton import singletonPurchaseRepository, singletonUserRepository
 from pythonProject.app.domain.use_cases.purchase_crud_use_case import PurchaseCrudUseCase
 from pythonProject.app.domain.use_cases.add_purchase_to_user import AddPurchaseToUser
 
 purchase_router = APIRouter()
 
 # Configuración de MongoDB
-mongo_uri = "mongodb+srv://juanjogomezarenas1:pass12345@pokeapi.cjeck.mongodb.net/?retryWrites=true&w=majority&appName=pokeApi"
-db_name = "pokedex_db"
-purchase_repo = MongoPurchaseRepository(mongo_uri, db_name)
-purchase_crud = PurchaseCrudUseCase(purchase_repo)
+# mongo_uri = "mongodb+srv://juanjogomezarenas1:pass12345@pokeapi.cjeck.mongodb.net/?retryWrites=true&w=majority&appName=pokeApi"
+# db_name = "pokedex_db"
+# purchase_repo = MongoPurchaseRepository(mongo_uri, db_name)
+purchase_crud = PurchaseCrudUseCase(singletonPurchaseRepository)
 
 # Aquí también puedes inicializar el repositorio de usuarios si es necesario
-from pythonProject.app.adapters.out.mongo_user_repository import MongoUserRepository
+# from pythonProject.app.adapters.out.mongo_user_repository import MongoUserRepository
 
-user_repo = MongoUserRepository(mongo_uri, db_name)
-add_purchases_use_case = AddPurchaseToUser(user_repo, purchase_repo)
+#user_repo = MongoUserRepository(mongo_uri, db_name)
+
+add_purchases_use_case = AddPurchaseToUser(singletonUserRepository, singletonPurchaseRepository)
 
 
 @purchase_router.post("/purchase", response_model=PurchaseResponseDTO)

@@ -1,7 +1,9 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from pythonProject.app.domain.model.purchase import Purchase
+from pythonProject.app.domain.model.user import User
 from pythonProject.app.domain.use_cases.repositories.purchase_repository import IPurchaseRepository
+
 
 class MongoPurchaseRepository(IPurchaseRepository):
     def __init__(self, mongo_uri: str, db_name: str):
@@ -9,11 +11,19 @@ class MongoPurchaseRepository(IPurchaseRepository):
         self.db = self.client[db_name]
         self.collection = self.db['purchase_collection']
 
-    def create(self, purchase: Purchase) -> Purchase:
-        purchase_dict = purchase.__dict__
-        result = self.collection.insert_one(purchase_dict)
-        purchase.id = str(result.inserted_id)
-        return purchase
+    def create(self, user: User) -> User:
+        user_dict = user.__dict__
+        next_id = self.get_next_id()
+        user_dict['_id'] = next_id
+        user_dict['id'] = next_id
+
+        # Convert purchases to dictionaries before inserting into MongoDB
+        if 'purchases' in user_dict:
+            user_dict['purchases'] = [purchase.to_dict() for purchase in user.purchases]
+
+        result = self.collection.insert_one(user_dict)
+        user.id = user_dict['_id']
+        return user
 
     def read(self, purchase_id: str) -> Purchase:
         purchase_data = self.collection.find_one({"_id": ObjectId(purchase_id)})
@@ -30,7 +40,7 @@ class MongoPurchaseRepository(IPurchaseRepository):
     def list(self) -> list:
         purchases = self.collection.find()
         return [Purchase(**purchase) for purchase in purchases]
-    
+
     def list_purchases_user(self, user_id: int) -> list:
         purchases = self.collection.find({"id_user": user_id})
         return [Purchase(**purchase) for purchase in purchases]

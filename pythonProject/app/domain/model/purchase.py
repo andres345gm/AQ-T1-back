@@ -8,3 +8,12 @@ class Purchase:
         self.price = price
         self.id_user = id_user
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "id_pokemon": self.id_pokemon,
+            "date": self.date,
+            "price": self.price,
+            "id_user": self.id_user
+        }
+

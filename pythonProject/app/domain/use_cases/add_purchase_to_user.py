@@ -19,8 +19,6 @@ class AddPurchaseToUser:
         try:
             user.add_purchase(purchase)
             self.user_repository.update(user.id, user)
+            return True
         except Exception as e:
             return False
-        user.add_purchase(purchase)
-        self.user_repository.update(user.id, user)
-        return True

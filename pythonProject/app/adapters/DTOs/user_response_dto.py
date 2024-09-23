@@ -10,7 +10,7 @@ from pythonProject.app.domain.model.purchase import Purchase
 class UserResponseDTO(BaseModel):
     id: int
     user: str
-    balance: float
+    balance: int
     purchases: List[PurchaseResponseDTO]
 
     model_config = {
