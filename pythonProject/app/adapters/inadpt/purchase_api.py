@@ -40,3 +40,7 @@ def delete_purchase(purchase_id: int):
 @purchase_router.get("/purchase", response_model=List[PurchaseResponseDTO])
 def list_purchases():
     return purchase_crud.list_purchases()
+
+@purchase_router.get("/purchase/user/{user_id}", response_model=List[PurchaseResponseDTO])
+def list_purchases_user(user_id: int):
+    return purchase_crud.list_purchases_user(user_id)

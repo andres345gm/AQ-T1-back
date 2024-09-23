@@ -23,3 +23,7 @@ class IPurchaseRepository(ABC):
     @abstractmethod
     def list(self) -> List[Purchase]:
         pass
+    
+    @abstractmethod
+    def list_purchases_user(self,user_id: int) -> list:
+        pass

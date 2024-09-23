@@ -8,4 +8,4 @@ class LoginUseCase:
             return False
         if user.password != password:
             return False
-        return True
+        return user

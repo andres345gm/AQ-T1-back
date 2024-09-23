@@ -1,3 +1,5 @@
+import datetime
+from pythonProject.app.domain.model.purchase import Purchase
 from pythonProject.app.domain.model.user import User
 from pythonProject.app.domain.use_cases.repositories.user_repository import IUserRepository
 
@@ -5,9 +7,16 @@ from pythonProject.app.domain.use_cases.repositories.user_repository import IUse
 class MockUserRepository(IUserRepository):
     def __init__(self):
         self.users = {
-            1: User(1, "user1", "password1"),
+            1: self.create_user_with_purchase(1, "user1", "password1"),
             2: User(2, "user2", "password2")
         }
+
+    def create_user_with_purchase(self, id: int, user: str, password: str):
+        user_instance = User(id, user, password)
+        # Crea una compra predefinida
+        purchase = Purchase(1, 703, "11/10/2021", 1, id)  # ID de compra, ID del Pokémon, fecha, precio, ID del usuario
+        user_instance.add_purchase(purchase)
+        return user_instance
 
     def create(self, user: User) -> User:
         user.id = max(self.users.keys()) + 1

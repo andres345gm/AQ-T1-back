@@ -24,3 +24,6 @@ class PurchaseCrudUseCase:
 
     def list_purchases(self) -> List[Purchase]:
         return self.purchase_repo.list()
+    
+    def list_purchases_user(self, user_id: int) -> List[Purchase]:
+        return self.purchase_repo.list_purchases_user(user_id)
