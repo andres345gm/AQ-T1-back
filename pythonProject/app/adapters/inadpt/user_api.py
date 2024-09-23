@@ -51,15 +51,18 @@ def delete_user(user_id: int):
     raise HTTPException(status_code=404, detail="User not found")
 
 
-@user_router.post("/user/{user_id}/purchase/{purchase_id}", response_model=UserResponseDTO)
-def add_purchase_to_user(user_id: int, purchase_id: int):
+@user_router.post("/user/purchase/{purchase_id}", response_model=UserResponseDTO)
+def add_purchase_to_user(purchase_id: int):
     # Add the purchase to the user
-    add_purchases_use_case.execute(user_id, purchase_id)
+    if add_purchases_use_case.execute(purchase_id):
+        # Fetch the updated user data
+        # Fetch the updated user data
+        purchase = purchase_repo.read(purchase_id)
+        user = user_crud.get_user(purchase.id_user)
 
-    # Fetch the updated user data
-    user = user_crud.get_user(user_id)
+        # Make sure purchases are converted to PurchaseResponseDTO objects, not User objects
+        user.purchases = [PurchaseResponseDTO.from_orm(purchase) for purchase in user.purchases]
 
-    # Make sure purchases are converted to PurchaseResponseDTO objects, not User objects
-    user.purchases = [PurchaseResponseDTO.from_orm(purchase) for purchase in user.purchases]
+        return user
+    raise HTTPException(status_code=404, detail="User not found")
 
-    return user

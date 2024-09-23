@@ -7,7 +7,9 @@ class User:
         self.purchases = []
 
     def add_purchase(self, purchase):
+        if purchase.price > self.balance:
+            raise Exception("Not enough balance")
         self.purchases.append(purchase)
-        self.balance -= 1
+        self.balance -= purchase.price
         return self
 
