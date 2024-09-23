@@ -31,3 +31,9 @@ class MockUserRepository(IUserRepository):
 
     def list(self) -> list:
         return list(self.users.values())
+
+    def get_user_by_username(self, username: str) -> User:
+        for user in self.users.values():
+            if user.user == username:
+                return user
+        return None
