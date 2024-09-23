@@ -2,8 +2,8 @@ from typing import List
 
 from fastapi import HTTPException, APIRouter
 
-from pythonProject.app.adapters.inadpt.DTOs.user_create_dto import UserCreateDTO
-from pythonProject.app.adapters.inadpt.DTOs.user_response_dto import UserResponseDTO
+from pythonProject.app.adapters.DTOs import UserCreateDTO
+from pythonProject.app.adapters.DTOs import UserResponseDTO
 from pythonProject.app.adapters.out.mock_user_repository import MockUserRepository
 from pythonProject.app.domain.use_cases.user_crud_use_case import UserCrudUseCase
 
