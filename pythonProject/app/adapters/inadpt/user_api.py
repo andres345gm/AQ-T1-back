@@ -5,12 +5,15 @@ from fastapi import HTTPException, APIRouter
 from pythonProject.app.adapters.DTOs.user_create_dto import UserCreateDTO
 from pythonProject.app.adapters.DTOs.user_response_dto import UserResponseDTO
 from pythonProject.app.adapters.out.mock_user_repository import MockUserRepository
+from pythonProject.app.domain.use_cases.add_purchase_to_user import AddPurchaseToUser
 from pythonProject.app.domain.use_cases.user_crud_use_case import UserCrudUseCase
 
 user_router = APIRouter()
 
 user_repo = MockUserRepository()
 user_crud = UserCrudUseCase(user_repo)
+add_purchases_use_case = AddPurchaseToUser(user_repo, MockUserRepository())
+
 
 @user_router.post("/user", response_model=UserResponseDTO)
 def create_user(user_data: UserCreateDTO):
@@ -33,12 +36,21 @@ def update_user(user_id: int, user_data: UserCreateDTO):
         return updated_user
     raise HTTPException(status_code=404, detail="User not found")
 
+
 @user_router.delete("/user/{user_id}")
 def delete_user(user_id: int):
     if user_crud.delete_user(user_id):
         return {"detail": "User deleted"}
     raise HTTPException(status_code=404, detail="User not found")
 
+
 @user_router.get("/user", response_model=List[UserResponseDTO])
 def list_users():
     return user_crud.list_users()
+
+
+@user_router.post("/user/{user_id}/purchase/{purchase_id}", response_model=UserResponseDTO)
+def add_purchase_to_user(user_id: int, purchase_id: int):
+    if add_purchases_use_case.execute(user_id, purchase_id):
+        return user_crud.get_user(user_id)
+    raise HTTPException(status_code=404, detail="User or purchase not found")

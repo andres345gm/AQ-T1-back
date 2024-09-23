@@ -3,12 +3,16 @@ from typing import List
 
 from pydantic import BaseModel
 
+from pythonProject.app.domain.model.purchase import Purchase
+
 
 class UserResponseDTO(BaseModel):
     id: int
     user: str
     balance: float
-    purchases: List[str]
+    purchases: List[Purchase]
 
-    class Config:
-        orm_mode = True  # Permite a Pydantic trabajar con objetos ORM o clases como `User`.
+    model_config = {
+        "arbitrary_types_allowed": True,  # Allows arbitrary types like your custom models
+        "from_attributes": True,  # Replaces 'orm_mode'
+    }

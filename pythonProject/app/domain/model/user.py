@@ -6,3 +6,8 @@ class User:
         self.balance = 5
         self.purchases = []
 
+    def add_purchase(self, purchase):
+        self.purchases.append(purchase)
+        self.balance -= purchase.price
+        return self
+
