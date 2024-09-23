@@ -1,5 +1,5 @@
-from app.domain.model.user import User
-from app.domain.use_cases.repositories.user_repository import IUserRepository
+from pythonProject.app.domain.model.user import User
+from pythonProject.app.domain.use_cases.repositories.user_repository import IUserRepository
 
 
 class MockUserRepository(IUserRepository):

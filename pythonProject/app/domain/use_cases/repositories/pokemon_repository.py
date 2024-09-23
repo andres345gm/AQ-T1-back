@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from app.domain.model.pokemon import Pokemon
+from pythonProject.app.domain.model.pokemon import Pokemon
 
 class PokemonRepository(ABC):
     @abstractmethod

@@ -1,13 +1,13 @@
 from typing import List, Optional
-from app.domain.model.user import User
-from app.domain.use_cases.repositories.user_repository import IUserRepository
+from pythonProject.app.domain.model.user import User
+from pythonProject.app.domain.use_cases.repositories.user_repository import IUserRepository
 
 class UserCrudUseCase:
     def __init__(self, user_repo: IUserRepository):
         self.user_repo = user_repo
 
     def create_user(self, username: str, password: str) -> User:
-        user = User(username, password)
+        user = User(0, username, password)
         return self.user_repo.create(user)
 
     def get_user(self, user_id: int) -> Optional[User]:
