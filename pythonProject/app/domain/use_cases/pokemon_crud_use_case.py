@@ -1,7 +1,7 @@
 from typing import List
 
-from pythonProject.app.domain.model.pokemon import Pokemon
-from pythonProject.app.domain.use_cases.repositories.pokemon_repository import PokemonRepository
+from app.domain.model.pokemon import Pokemon
+from app.domain.use_cases.repositories.pokemon_repository import PokemonRepository
 
 
 class PokemonCrudUseCase:

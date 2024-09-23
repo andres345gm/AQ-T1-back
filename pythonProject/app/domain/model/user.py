@@ -4,5 +4,5 @@ class User:
         self.user = user
         self.password = password
         self.balance = 5
-        self.pokemon_inventory = []
+        self.purchases = []
 
