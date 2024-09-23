@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from pythonProject.app.domain.model.purchase import Purchase
 from pythonProject.app.domain.model.user import User
-from pythonProject.app.domain.use_cases.repositories.purchase_repository import IPurchaseRepository
+from pythonProject.app.domain.ports.purchase_repository import IPurchaseRepository
 
 
 class MongoPurchaseRepository(IPurchaseRepository):

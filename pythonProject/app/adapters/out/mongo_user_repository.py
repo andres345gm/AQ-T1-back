@@ -2,7 +2,7 @@ from pymongo import MongoClient
 
 from pythonProject.app.domain.model.purchase import Purchase
 from pythonProject.app.domain.model.user import User
-from pythonProject.app.domain.use_cases.repositories.user_repository import IUserRepository
+from pythonProject.app.domain.ports.user_repository import IUserRepository
 
 import logging
 

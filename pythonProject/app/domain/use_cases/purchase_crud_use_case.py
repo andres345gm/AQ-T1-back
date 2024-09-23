@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from pythonProject.app.domain.model.purchase import Purchase
-from pythonProject.app.domain.use_cases.repositories.purchase_repository import IPurchaseRepository
+from pythonProject.app.domain.ports.purchase_repository import IPurchaseRepository
 
 
 class PurchaseCrudUseCase:

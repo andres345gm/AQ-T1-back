@@ -1,9 +1,8 @@
 import random
-from typing import List
 
 import requests
 from pythonProject.app.domain.model.pokemon import Pokemon
-from pythonProject.app.domain.use_cases.repositories.pokemon_repository import IPokemonRepository
+from pythonProject.app.domain.ports.pokemon_repository import IPokemonRepository
 
 class PokeApiAdapter(IPokemonRepository):
     BASE_URL = "https://pokeapi.co/api/v2/pokemon/"
