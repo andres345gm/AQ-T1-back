@@ -7,7 +7,6 @@ class PurchaseResponseDTO(BaseModel):
     price: int
     id_user: int
 
-    model_config = {
-        "arbitrary_types_allowed": True,  # Allows arbitrary types like your custom models
-        "from_attributes": True,  # Replaces 'orm_mode'
-    }
+    class Config:
+        arbitrary_types_allowed = True  # Allows arbitrary types like your custom models
+        from_attributes = True  # Enables loading data from ORM models

@@ -1,18 +1,25 @@
+import logging
 from typing import List
 
 from fastapi import HTTPException, APIRouter
 
+from pythonProject.app.adapters.DTOs.purchase_response_dto import PurchaseResponseDTO
 from pythonProject.app.adapters.DTOs.user_create_dto import UserCreateDTO
 from pythonProject.app.adapters.DTOs.user_response_dto import UserResponseDTO
+from pythonProject.app.adapters.inadpt.purchase_api import purchase_repo
 from pythonProject.app.adapters.out.mock_user_repository import MockUserRepository
 from pythonProject.app.domain.use_cases.add_purchase_to_user import AddPurchaseToUser
 from pythonProject.app.domain.use_cases.user_crud_use_case import UserCrudUseCase
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 user_router = APIRouter()
 
 user_repo = MockUserRepository()
+purchase_repo = purchase_repo
 user_crud = UserCrudUseCase(user_repo)
-add_purchases_use_case = AddPurchaseToUser(user_repo, MockUserRepository())
+add_purchases_use_case = AddPurchaseToUser(user_repo, purchase_repo)
 
 
 @user_router.post("/user", response_model=UserResponseDTO)
@@ -44,13 +51,15 @@ def delete_user(user_id: int):
     raise HTTPException(status_code=404, detail="User not found")
 
 
-@user_router.get("/user", response_model=List[UserResponseDTO])
-def list_users():
-    return user_crud.list_users()
-
-
 @user_router.post("/user/{user_id}/purchase/{purchase_id}", response_model=UserResponseDTO)
 def add_purchase_to_user(user_id: int, purchase_id: int):
-    if add_purchases_use_case.execute(user_id, purchase_id):
-        return user_crud.get_user(user_id)
-    raise HTTPException(status_code=404, detail="User or purchase not found")
+    # Add the purchase to the user
+    add_purchases_use_case.execute(user_id, purchase_id)
+
+    # Fetch the updated user data
+    user = user_crud.get_user(user_id)
+
+    # Make sure purchases are converted to PurchaseResponseDTO objects, not User objects
+    user.purchases = [PurchaseResponseDTO.from_orm(purchase) for purchase in user.purchases]
+
+    return user

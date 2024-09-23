@@ -8,6 +8,6 @@ class User:
 
     def add_purchase(self, purchase):
         self.purchases.append(purchase)
-        self.balance -= purchase.price
+        self.balance -= 1
         return self
 
