@@ -10,3 +10,15 @@ class PokeInfoDTO(BaseModel):
     hp: int
     attack: int
     image: str
+
+
+def map_poke_to_dto(poke):
+    return PokeInfoDTO(
+        id=poke.id_,
+        name=poke.name,
+        height=poke.height,
+        weight=poke.weight,
+        hp=poke.hp,
+        attack=poke.attack,
+        image=poke.image
+    )
