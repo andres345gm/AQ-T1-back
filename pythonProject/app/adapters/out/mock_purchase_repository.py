@@ -11,8 +11,8 @@ class MockPurchaseRepository(IPurchaseRepository):
         }
 
     def create(self, purchase: Purchase) -> Purchase:
-        purchase.id = max(self.purchases.keys()) + 1
-        self.purchases[purchase.id] = purchase
+        purchase.id_ = max(self.purchases.keys()) + 1
+        self.purchases[purchase.id_] = purchase
         return purchase
 
     def read(self, purchase_id: int) -> Purchase:

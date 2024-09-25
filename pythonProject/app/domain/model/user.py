@@ -1,6 +1,6 @@
 class User:
     def __init__(self, id: int, user: str, password: str, balance: int = 5, purchases: list = []):
-        self.id = id
+        self.id_ = id
         self.user = user
         self.password = password
         self.balance = balance

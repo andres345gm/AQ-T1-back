@@ -22,7 +22,7 @@ class MongoPurchaseRepository(IPurchaseRepository):
             user_dict['purchases'] = [purchase.to_dict() for purchase in user.purchases]
 
         result = self.collection.insert_one(user_dict)
-        user.id = user_dict['_id']
+        user.id_ = user_dict['_id']
         return user
 
     def read(self, purchase_id: str) -> Purchase:

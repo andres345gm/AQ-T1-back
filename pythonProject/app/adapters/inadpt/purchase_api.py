@@ -76,16 +76,4 @@ def list_purchases_user(user_id: int):
     return purchase_crud.list_purchases_user(user_id)
 
 
-@purchase_router.post("/purchase/user", response_model=PurchaseResponseDTO)
-def create_purchase_for_user(purchase_data: PurchaseCreateDTO):
-    new_purchase = purchase_crud.create_purchase(
-        purchase_data.id_pokemon, 
-        purchase_data.date, 
-        purchase_data.price, 
-        purchase_data.id_user
-    )
-    if new_purchase is None:
-        raise HTTPException(status_code=404, detail="Purchase not created")
-    if add_purchases_use_case.execute(new_purchase.id):
-        return new_purchase
-    raise HTTPException(status_code=404, detail="Purchase not created")
+
