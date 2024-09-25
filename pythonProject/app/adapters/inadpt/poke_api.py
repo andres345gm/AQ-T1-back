@@ -33,7 +33,7 @@ def get_user(n: int):
 
     if pokes:
         return [
-            PokeMiniInfoDTO(id=poke.id, name=poke.name, image=poke.image)
+            PokeMiniInfoDTO(id=poke.id_, name=poke.name, image=poke.image)
             for poke in pokes
         ]
 

@@ -1,8 +1,9 @@
 from datetime import datetime
 
+
 class Purchase:
-    def __init__(self, id: int, id_pokemon : int, date: str, price: int, id_user: int):
-        self.id = id
+    def __init__(self, id: int, id_pokemon: int, date: str, price: int, id_user: int):
+        self.id_ = id
         self.id_pokemon = id_pokemon
         self.date = date
         self.price = price
@@ -10,7 +11,7 @@ class Purchase:
 
     def to_dict(self):
         return {
-            "id": self.id,
+            "id": self.id_,
             "id_pokemon": self.id_pokemon,
             "date": self.date,
             "price": self.price,

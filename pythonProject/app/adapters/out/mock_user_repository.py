@@ -9,8 +9,8 @@ class MockUserRepository(IUserRepository):
         }
 
     def create(self, user: User) -> User:
-        user.id = max(self.users.keys()) + 1
-        self.users[user.id] = user
+        user.id_ = max(self.users.keys()) + 1
+        self.users[user.id_] = user
         return user
 
     def read(self, user_id: int) -> User:
