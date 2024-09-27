@@ -41,7 +41,7 @@ def create_user(user_data: UserCreateDTO):
 
 
 @user_router.get("/user/{user_id}", response_model=UserResponseDTO)
-def get_user(user_id: int):  # Cambiado a str para ObjectId
+def get_user(user_id: int): 
     user = user_crud.get_user(user_id)
     if user:
         user_response = map_user_to_response_dto(user)
