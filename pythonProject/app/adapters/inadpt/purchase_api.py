@@ -27,7 +27,7 @@ purchase_crud = PurchaseCrudUseCase(singletonPurchaseRepository)
 add_purchases_use_case = AddPurchaseToUser(singletonUserRepository, singletonPurchaseRepository)
 
 
-@purchase_router.post("/purchase", response_model=PurchaseResponseDTO)
+@purchase_router.post("/purchase/user", response_model=PurchaseResponseDTO)
 def create_purchase(purchase_data: PurchaseCreateDTO):
     new_purchase = map_dto_to_purchase(purchase_data)
     new_purchase_created = purchase_crud.create_purchase(

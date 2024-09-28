@@ -16,7 +16,7 @@ poke_petition = PokemonUseCase(poke_api)
 
 
 @poke_router.get("/poke/{poke_id}", response_model=PokeInfoDTO)
-def get_user(poke_id: str):
+def get_pokemon(poke_id: str):
     # obtener info del pokemon
     logger.info(f"Fetching Pokémon with id {poke_id}")
     poke = poke_petition.get_pokemon_by_name_or_id(poke_id)
@@ -27,7 +27,7 @@ def get_user(poke_id: str):
 
 
 @poke_router.get("/poke/all/{n}", response_model=List[PokeMiniInfoDTO])
-def get_user(n: int):
+def get_multiple_pokemons(n: int):
     # Obtener info de los Pokémon
     logger.info(f"Fetching {n} Pokémons")
     pokes = poke_petition.get_multiple_pokemons(n)

@@ -41,16 +41,28 @@ class MongoUserRepository(IUserRepository):
         return None
 
     def update(self, user_id: int, user: User) -> User:
+        # Convertir cada compra a un objeto Purchase si es un diccionario
+        purchases_as_objects = [
+            purchase if isinstance(purchase, Purchase) else Purchase(**purchase)
+            for purchase in user.purchases
+        ]
+
+        # Preparar el diccionario de usuario para la actualización
         user_dict = {
             "user": user.user,
             "password": user.password,
             "balance": user.balance,
-            "purchases": [purchase.to_dict() for purchase in user.purchases] if user.purchases else []
+            "purchases": [purchase.to_dict() for purchase in purchases_as_objects] if user.purchases else []
         }
 
+        # Actualizar el usuario en la base de datos
         self.collection.update_one({"_id": user_id}, {"$set": user_dict})
+        
+        # Asignar el ID del usuario y devolverlo
         user.id_ = user_id
+        user.purchases = purchases_as_objects  # Asegurarse de que el usuario devuelto tiene objetos Purchase
         return user
+
 
     def delete(self, user_id: int) -> bool:
         result = self.collection.delete_one({"_id": user_id})
@@ -65,4 +77,12 @@ class MongoUserRepository(IUserRepository):
         if user_data:
             user_id_value = user_data.pop('_id')
             return User(id=user_id_value, **user_data)
+        return None
+    def get_user_by_username(self, username: str) -> User:
+        user_data = self.collection.find_one({"user": username})
+        if user_data:
+            user_id_value = user_data.pop('_id')
+            # Convertir las compras a objetos Purchase
+            purchases = [Purchase(**purchase) for purchase in user_data.pop('purchases', [])]
+            return User(id=user_id_value, purchases=purchases, **user_data)
         return None

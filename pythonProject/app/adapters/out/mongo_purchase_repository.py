@@ -1,46 +1,79 @@
-from pymongo import MongoClient
-from bson.objectid import ObjectId
 from pythonProject.app.domain.model.purchase import Purchase
-from pythonProject.app.domain.model.user import User
 from pythonProject.app.domain.ports.purchase_repository import IPurchaseRepository
+from pymongo import MongoClient
 
 
 class MongoPurchaseRepository(IPurchaseRepository):
     def __init__(self, mongo_uri: str, db_name: str):
         self.client = MongoClient(mongo_uri)
         self.db = self.client[db_name]
-        self.collection = self.db['purchase_collection']
+        self.collection = self.db['user_collection']  # Se almacenan las compras en los documentos de usuarios
 
-    def create(self, user: User) -> User:
-        user_dict = user.__dict__
-        next_id = self.get_next_id()
-        user_dict['_id'] = next_id
-        user_dict['id'] = next_id
+    def create(self, purchase: Purchase) -> Purchase:
+        # Generar un ID para la compra
+        purchase.id_ = self.get_next_purchase_id(purchase.id_user)
+        purchase_dict = purchase.to_dict()
 
-        # Convert purchases to dictionaries before inserting into MongoDB
-        if 'purchases' in user_dict:
-            user_dict['purchases'] = [purchase.to_dict() for purchase in user.purchases]
+        # Insertar la compra en la lista de compras del usuario
+        self.collection.update_one(
+            {"_id": purchase.id_user},
+            {"$push": {"purchases": purchase_dict}}
+        )
 
-        result = self.collection.insert_one(user_dict)
-        user.id_ = user_dict['_id']
-        return user
-
-    def read(self, purchase_id: str) -> Purchase:
-        purchase_data = self.collection.find_one({"_id": ObjectId(purchase_id)})
-        return Purchase(**purchase_data) if purchase_data else None
-
-    def update(self, purchase_id: str, purchase: Purchase) -> Purchase:
-        self.collection.update_one({"_id": ObjectId(purchase_id)}, {"$set": purchase.__dict__})
         return purchase
 
-    def delete(self, purchase_id: str) -> bool:
-        result = self.collection.delete_one({"_id": ObjectId(purchase_id)})
-        return result.deleted_count > 0
+    def read(self, purchase_id: int) -> Purchase:
+        # Buscar la compra dentro de la lista de compras de los usuarios
+        user = self.collection.find_one(
+            {"purchases.id": purchase_id},
+            {"purchases.$": 1}  # Solo devuelve la compra que coincide
+        )
+
+        if user and 'purchases' in user:
+            purchase_data = user['purchases'][0]  # La compra está en la posición 0
+            return Purchase(**purchase_data)
+        
+        return None
+
+    def update(self, purchase_id: int, purchase: Purchase) -> Purchase:
+        # Actualizar una compra específica dentro de la lista de compras del usuario
+        self.collection.update_one(
+            {"purchases.id": purchase_id},
+            {"$set": {"purchases.$": purchase.to_dict()}}
+        )
+        
+        return purchase
+
+    def delete(self, purchase_id: int) -> bool:
+        # Eliminar una compra de la lista de compras del usuario
+        result = self.collection.update_one(
+            {"purchases.id": purchase_id},
+            {"$pull": {"purchases": {"id": purchase_id}}}
+        )
+        return result.modified_count > 0
 
     def list(self) -> list:
-        purchases = self.collection.find()
+        # Devolver todas las compras de todos los usuarios
+        users = self.collection.find({}, {"purchases": 1})
+        purchases = []
+
+        for user in users:
+            purchases.extend(user.get("purchases", []))
+
         return [Purchase(**purchase) for purchase in purchases]
 
     def list_purchases_user(self, user_id: int) -> list:
-        purchases = self.collection.find({"id_user": user_id})
-        return [Purchase(**purchase) for purchase in purchases]
+        # Buscar todas las compras de un usuario específico
+        user = self.collection.find_one({"_id": user_id}, {"purchases": 1})
+
+        if user and 'purchases' in user:
+            return [Purchase(**purchase) for purchase in user['purchases']]
+        return []
+
+    def get_next_purchase_id(self, user_id: int) -> int:
+        # Obtener el siguiente ID de compra en función de las compras actuales del usuario
+        user = self.collection.find_one({"_id": user_id}, {"purchases": 1})
+        if user and 'purchases' in user and user['purchases']:
+            max_id = max(purchase['id'] for purchase in user['purchases'])
+            return max_id + 1
+        return 1
