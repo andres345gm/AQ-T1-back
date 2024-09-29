@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from pythonProject.app.domain.model.purchase import Purchase
+from app.domain.model.purchase import Purchase
 
 
 class PurchaseResponseDTO(BaseModel):

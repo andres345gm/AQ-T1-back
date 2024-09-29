@@ -1,7 +1,5 @@
 import logging
 
-from pythonProject.app.adapters.DTOs.purchase_create_dto import map_dto_to_purchase
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 

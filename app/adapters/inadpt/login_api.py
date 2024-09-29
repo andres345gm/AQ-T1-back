@@ -2,18 +2,16 @@ import logging
 
 from fastapi import APIRouter, HTTPException
 
-from pythonProject.app.adapters.DTOs.login_dto import LoginDTO
-from pythonProject.app.adapters.DTOs.user_response_dto import UserResponseDTO, map_user_to_response_dto
-from pythonProject.app.adapters.out.mock_user_repository import MockUserRepository
-from pythonProject.app.adapters.out.singleton import singletonUserRepository
-from pythonProject.app.domain.use_cases.login_use_case import LoginUseCase
+from app.adapters.DTOs.login_dto import LoginDTO
+from app.adapters.DTOs.user_response_dto import UserResponseDTO, map_user_to_response_dto
+from app.adapters.out.singleton import singletonUserRepository
+from app.domain.services.login_service import LoginUseCase
 
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 login_router = APIRouter()
 
-login_repo = MockUserRepository()
 login_use_case = LoginUseCase(singletonUserRepository)
 
 

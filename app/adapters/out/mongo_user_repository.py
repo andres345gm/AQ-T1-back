@@ -1,11 +1,14 @@
-from pymongo import MongoClient
-from pythonProject.app.domain.model.purchase import Purchase
-from pythonProject.app.domain.model.user import User
-from pythonProject.app.domain.ports.user_repository import IUserRepository
 import logging
+
+from pymongo import MongoClient
+
+from app.domain.model.purchase import Purchase
+from app.domain.model.user import User
+from app.domain.ports.user_repository import IUserRepository
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 class MongoUserRepository(IUserRepository):
     def __init__(self, mongo_uri: str, db_name: str):
@@ -57,12 +60,11 @@ class MongoUserRepository(IUserRepository):
 
         # Actualizar el usuario en la base de datos
         self.collection.update_one({"_id": user_id}, {"$set": user_dict})
-        
+
         # Asignar el ID del usuario y devolverlo
         user.id_ = user_id
-        user.purchases = purchases_as_objects  # Asegurarse de que el usuario devuelto tiene objetos Purchase
+        user.purchases = purchases_as_objects
         return user
-
 
     def delete(self, user_id: int) -> bool:
         result = self.collection.delete_one({"_id": user_id})
@@ -73,11 +75,12 @@ class MongoUserRepository(IUserRepository):
         return [User(id=user['_id'], **user) for user in users]
 
     def get_user_by_username(self, username: str) -> User:
-        user_data = self.collection.find_one({"user": username})  # Asegúrate de usar el campo correcto
+        user_data = self.collection.find_one({"user": username})
         if user_data:
             user_id_value = user_data.pop('_id')
             return User(id=user_id_value, **user_data)
         return None
+
     def get_user_by_username(self, username: str) -> User:
         user_data = self.collection.find_one({"user": username})
         if user_data:

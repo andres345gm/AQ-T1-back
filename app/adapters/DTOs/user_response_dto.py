@@ -3,8 +3,8 @@ from typing import List
 
 from pydantic import BaseModel
 
-from pythonProject.app.adapters.DTOs.purchase_response_dto import PurchaseResponseDTO, map_purchase_to_dto
-from pythonProject.app.domain.model.user import User
+from app.adapters.DTOs.purchase_response_dto import PurchaseResponseDTO, map_purchase_to_dto
+from app.domain.model.user import User
 
 
 class UserResponseDTO(BaseModel):

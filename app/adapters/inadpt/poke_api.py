@@ -1,10 +1,10 @@
 from typing import List
-from fastapi import APIRouter, FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 import logging  # Importar el módulo logging
-from pythonProject.app.adapters.out.poke_api_Repository import PokeApiAdapter
-from pythonProject.app.domain.use_cases.pokemon_api_use_case import PokemonUseCase
-from pythonProject.app.adapters.DTOs.poke_info_dto import PokeInfoDTO, map_poke_to_dto
-from pythonProject.app.adapters.DTOs.poke_mini_info_dto import PokeMiniInfoDTO
+from app.adapters.out.poke_api_Repository import PokeApiAdapter
+from app.domain.services.pokemon_api_service import PokemonUseCase
+from app.adapters.DTOs.poke_info_dto import PokeInfoDTO, map_poke_to_dto
+from app.adapters.DTOs.poke_mini_info_dto import PokeMiniInfoDTO
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)

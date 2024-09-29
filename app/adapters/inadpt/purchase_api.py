@@ -3,11 +3,11 @@ from typing import List
 
 from fastapi import HTTPException, APIRouter
 
-from pythonProject.app.adapters.DTOs.purchase_create_dto import PurchaseCreateDTO, map_dto_to_purchase
-from pythonProject.app.adapters.DTOs.purchase_response_dto import PurchaseResponseDTO, map_purchase_to_dto
-from pythonProject.app.adapters.out.singleton import singletonPurchaseRepository, singletonUserRepository
-from pythonProject.app.domain.use_cases.add_purchase_to_user import AddPurchaseToUser
-from pythonProject.app.domain.use_cases.purchase_crud_use_case import PurchaseCrudUseCase
+from app.adapters.DTOs.purchase_create_dto import PurchaseCreateDTO, map_dto_to_purchase
+from app.adapters.DTOs.purchase_response_dto import PurchaseResponseDTO, map_purchase_to_dto
+from app.adapters.out.singleton import singletonPurchaseRepository, singletonUserRepository
+from app.domain.services.add_purchase_service import AddPurchaseToUser
+from app.domain.services.purchase_crud_service import PurchaseCrudUseCase
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

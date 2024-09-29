@@ -1,8 +1,8 @@
 import random
 
 import requests
-from pythonProject.app.domain.model.pokemon import Pokemon
-from pythonProject.app.domain.ports.pokemon_repository import IPokemonRepository
+from app.domain.model.pokemon import Pokemon
+from app.domain.ports.pokemon_repository import IPokemonRepository
 
 class PokeApiAdapter(IPokemonRepository):
     BASE_URL = "https://pokeapi.co/api/v2/pokemon/"
@@ -67,7 +67,7 @@ class PokeApiAdapter(IPokemonRepository):
             max_pokemon_id = data["count"]
             
             # Inicializar la lista de pokemons
-            pokemons = []  # Asegúrate de inicializar la lista aquí
+            pokemons = []
 
             for _ in range(n):
                 random_id = random.randint(1, max_pokemon_id)

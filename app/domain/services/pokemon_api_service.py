@@ -1,6 +1,5 @@
-import random
-from pythonProject.app.adapters.out.poke_api_Repository import PokeApiAdapter
-from pythonProject.app.domain.model.pokemon import Pokemon
+from app.adapters.out.poke_api_Repository import PokeApiAdapter
+from app.domain.model.pokemon import Pokemon
 
 class PokemonUseCase:
     def __init__(self, pokemon_adapter: PokeApiAdapter):

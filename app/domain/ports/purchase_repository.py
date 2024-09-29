@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from pythonProject.app.domain.model.purchase import Purchase
+from app.domain.model.purchase import Purchase
 
 
 class IPurchaseRepository(ABC):
