@@ -1,6 +1,7 @@
 # AQ-T1-back
 
-Este es el backend del proyecto AQ-T1 desarrollado con **Python** y **FastAPI**, utilizando una **arquitectura hexagonal**. Este patrón de diseño permite que los componentes internos del sistema (dominio) sean independientes de los mecanismos externos (adaptadores).
+Este es el backend del proyecto AQ-T1 desarrollado con **Python** y **FastAPI**, utilizando una **arquitectura hexagonal**. Este patrón de diseño permite que los componentes internos del sistema (dominio) sean independientes de los mecanismos externos (adaptadores). En caso de que se quiera consultar el frontend de este proyecto, se puede consultar el siguiente enlace:
+https://github.com/andres345gm/AQ-T1-front
 
 ### Carpetas Principales:
 
